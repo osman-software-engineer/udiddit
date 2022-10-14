@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS "posts"
     "title"    VARCHAR(100) NOT NULL CHECK (Length(Trim("title")) > 0),
     "url"      TEXT,
     "content"  TEXT,
-    "topic_id" BIGINT REFERENCES "topics" ("id") ON DELETE CASCADE,
+    "topic_id" BIGINT NOT NULL REFERENCES "topics" ("id") ON DELETE CASCADE,
     "user_id"  BIGINT REFERENCES "users" ("id") ON DELETE SET NULL,
     CONSTRAINT either_url_or_content_should_be_empty
         CHECK (("url" IS NOT NULL AND content IS NULL)
@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS "posts"
 
 CREATE INDEX IF NOT EXISTS "find_posts_by_topic_id" ON "posts"("topic_id");
 CREATE INDEX IF NOT EXISTS "find_posts_by_user_id" ON "posts"("user_id");
+
 
 CREATE TABLE IF NOT EXISTS "comments"
 (
@@ -55,7 +56,8 @@ CREATE TABLE IF NOT EXISTS "votes"
     "id"      BIGSERIAL PRIMARY KEY,
     "vote"    SMALLINT NOT NULL CHECK (vote = 1 or vote = -1),
     "user_id" BIGINT   REFERENCES "users" ("id") ON DELETE SET NULL,
-    "post_id" BIGINT   REFERENCES "posts" ("id") ON DELETE CASCADE
+    "post_id" BIGINT   REFERENCES "posts" ("id") ON DELETE CASCADE,
+     CONSTRAINT "no_multiple_votes" Unique ("user_id", "post_id")
 
 );
 

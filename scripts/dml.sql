@@ -1,9 +1,16 @@
-INSERT INTO users (username)
-SELECT DISTINCT username
-FROM bad_comments
+INSERT INTO "users" ("username")
+SELECT "username"
+FROM "bad_comments"
 UNION
-SELECT DISTINCT username
+SELECT "username"
+FROM "bad_posts"
+UNION
+SELECT DISTINCT regexp_split_to_table(downvotes, ',')
+FROM bad_posts
+UNION
+SELECT DISTINCT regexp_split_to_table(upvotes, ',')
 FROM bad_posts;
+
 
 INSERT INTO topics (name, user_id)
 SELECT DISTINCT ON (topic) bp.topic, u.id
@@ -13,7 +20,11 @@ FROM users AS u
 GROUP BY 1, 2;
 
 INSERT INTO posts (title, url, content, topic_id, user_id)
-SELECT LEFT(bp.title, 100), bp.url, bp.text_content, t.id, u.id
+SELECT LEFT(bp.title, 100),
+       bp.url,
+       bp.text_content,
+       t.id,
+       u.id
 FROM bad_posts AS bp
          JOIN users AS u
               ON bp.username = u.username
@@ -22,7 +33,9 @@ FROM bad_posts AS bp
 ORDER BY u.id;
 
 INSERT INTO comments(content, post_id, user_id)
-SELECT bc.text_content, p.id, u.id
+SELECT bc.text_content,
+       p.id,
+       u.id
 FROM bad_comments AS bc
          JOIN bad_posts AS bp
               ON bc.post_id = bp.id
