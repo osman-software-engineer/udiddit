@@ -15,9 +15,12 @@ You need to complete the following in the template:
 * Part II: Create the DDL for your new schema
 * Part III: Migrate the provided data
 
-# Project Rubric
+## Project Rubric
 Following the tasks in the Google Docs template should get you to a fully functioning project, but make sure to double-check your work against the requirements in the [project rubric](https://review.udacity.com/#!/rubrics/2802/view) as well before you submit on the last page in this lesson.
 
 ## Supporting Materials
 * bad_db.sql
 * Udiddit, A Social News Aggregator Student Starter Template
+
+## Project Implemenation
+https://github.com/osmanacademy/sql-udiddit/wiki
